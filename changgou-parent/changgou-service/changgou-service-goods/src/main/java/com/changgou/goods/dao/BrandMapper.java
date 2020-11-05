@@ -1,15 +1,16 @@
 package com.changgou.goods.dao;
 
 import com.changgou.goods.pojo.Brand;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
-/**
- * 品牌dao
- * 使用通用mapper 继承Mapper<T> tk包下
- * 增加数据,调用Mapper.insert()
- */
-@Component
-public interface BrandMapper extends Mapper<Brand> {
+import java.util.List;
 
+
+public interface BrandMapper extends Mapper<Brand> {
+    /***
+     * 查询分类对应的品牌集合
+     */
+    @Select("SELECT tb.* FROM tb_category_brand tcb,tb_brand tb WHERE tcb.category_id=#{categoryId} AND tb.id=tcb.brand_id")
+    List<Brand> findByCategory(Integer categoryId);
 }

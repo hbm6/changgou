@@ -5,32 +5,62 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
-/**
- * 这是相册接口层
- */
+
 public interface AlbumService {
-    //查询全部
-    List<Album> findAll();
 
-    //根据id查询
-    Album findById(Long id);
+    /***
+     * Album多条件分页查询
+     * @param album
+     * @param page
+     * @param size
+     * @return
+     */
+    PageInfo<Album> findPage(Album album, int page, int size);
 
-    //根据id修改
-    void update(Album album);
+    /***
+     * Album分页查询
+     * @param page
+     * @param size
+     * @return
+     */
+    PageInfo<Album> findPage(int page, int size);
 
-    //添加
-    void add(Album album);
-
-    //根据id删除
-    void delete(Long id);
-
-    //多条件查询
+    /***
+     * Album多条件搜索方法
+     * @param album
+     * @return
+     */
     List<Album> findList(Album album);
 
-    //无条件分页查询
-    PageInfo<Album> findPage(Integer page, Integer size);
+    /***
+     * 删除Album
+     * @param id
+     */
+    void delete(Long id);
 
-    //待条件分页查询
-    PageInfo<Album> findPage(Album album, Integer page, Integer size);
+    /***
+     * 修改Album数据
+     * @param album
+     */
+    void update(Album album);
 
+    /***
+     * 新增Album
+     * @param album
+     */
+    void add(Album album);
+
+    /**
+     * 根据ID查询Album
+     *
+     * @param id
+     * @return
+     */
+    Album findById(Long id);
+
+    /***
+     * 查询所有Album
+     * @return
+     */
+    List<Album> findAll();
 }

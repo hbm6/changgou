@@ -10,64 +10,119 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/spec")
 @CrossOrigin
-/**
- * 规格管理
- */
 public class SpecController {
+
     @Autowired
     private SpecService specService;
 
-    @GetMapping
-    public Result<Spec> findAll() {
-        List<Spec> specList = specService.findAll();
-        return new Result<Spec>(true, StatusCode.OK, "查询规格成功");
+    @GetMapping("/category/{id}")
+    public Result<List<Spec>> findByCategoryId(@PathVariable("id") Integer categoryId) {
+        List<Spec> byCategoryId = specService.findByCategoryId(categoryId);
+        return new Result<List<Spec>>(true, StatusCode.OK, "根据分类id查询对应规格", byCategoryId);
     }
 
-    @GetMapping("/{id}")
-    public Result<Spec> findById(@PathVariable Integer id) {
-        Spec serviceById = specService.findById(id);
-        return new Result<Spec>(true, StatusCode.OK, "查询成功", serviceById);
+    /***
+     * Spec分页条件搜索实现
+     * @param spec
+     * @param page
+     * @param size
+     * @return
+     */
+    @PostMapping(value = "/search/{page}/{size}")
+    public Result<PageInfo> findPage(@RequestBody(required = false) Spec spec, @PathVariable int page, @PathVariable int size) {
+        //调用SpecService实现分页条件查询Spec
+        PageInfo<Spec> pageInfo = specService.findPage(spec, page, size);
+        return new Result(true, StatusCode.OK, "查询成功", pageInfo);
     }
 
-    @PostMapping()
-    public Result add(@RequestBody(required = false) Spec spec) {
-        specService.add(spec);
-        return new Result(true, StatusCode.OK, "添加成功");
+    /***
+     * Spec分页搜索实现
+     * @param page:当前页
+     * @param size:每页显示多少条
+     * @return
+     */
+    @GetMapping(value = "/search/{page}/{size}")
+    public Result<PageInfo> findPage(@PathVariable int page, @PathVariable int size) {
+        //调用SpecService实现分页查询Spec
+        PageInfo<Spec> pageInfo = specService.findPage(page, size);
+        return new Result<PageInfo>(true, StatusCode.OK, "查询成功", pageInfo);
     }
 
-    @PutMapping("/{id}")
-    public Result update(@RequestBody Spec spec, @PathVariable("id") Integer id) {
-        spec.setId(id);
-        specService.update(spec);
-        return new Result(true, StatusCode.OK, "修改成功");
+    /***
+     * 多条件搜索品牌数据
+     * @param spec
+     * @return
+     */
+    @PostMapping(value = "/search")
+    public Result<List<Spec>> findList(@RequestBody(required = false) Spec spec) {
+        //调用SpecService实现条件查询Spec
+        List<Spec> list = specService.findList(spec);
+        return new Result<List<Spec>>(true, StatusCode.OK, "查询成功", list);
     }
 
-    @DeleteMapping("/{id}")
+    /***
+     * 根据ID删除品牌数据
+     * @param id
+     * @return
+     */
+    @DeleteMapping(value = "/{id}")
     public Result delete(@PathVariable Integer id) {
+        //调用SpecService实现根据主键删除
         specService.delete(id);
         return new Result(true, StatusCode.OK, "删除成功");
     }
 
-    @PostMapping("/search")
-    public Result<List<Spec>> findList(@RequestBody(required = false) Spec spec) {
-        List<Spec> specList = specService.findList(spec);
-        return new Result<>(true, StatusCode.OK, "条件查询成功", specList);
-
+    /***
+     * 修改Spec数据
+     * @param spec
+     * @param id
+     * @return
+     */
+    @PutMapping(value = "/{id}")
+    public Result update(@RequestBody Spec spec, @PathVariable Integer id) {
+        //设置主键值
+        spec.setId(id);
+        //调用SpecService实现修改Spec
+        specService.update(spec);
+        return new Result(true, StatusCode.OK, "修改成功");
     }
 
-    @GetMapping("/search/{page}/{size}")
-    public Result<PageInfo> findPage(@PathVariable("page") Integer page, @PathVariable("size") Integer size) {
-        PageInfo<Spec> specPageInfo = specService.findPage(page, size);
-        return new Result<PageInfo>(true, StatusCode.OK, "分页查询成功", specPageInfo);
-
+    /***
+     * 新增Spec数据
+     * @param spec
+     * @return
+     */
+    @PostMapping
+    public Result add(@RequestBody Spec spec) {
+        //调用SpecService实现添加Spec
+        specService.add(spec);
+        return new Result(true, StatusCode.OK, "添加成功");
     }
 
-    @PostMapping("/search/{page}/{size}")
-    public Result<PageInfo> findPage(@RequestBody Spec spec, @PathVariable("page") Integer page, @PathVariable("size") Integer size) {
-        PageInfo<Spec> pageInfo = specService.findPage(spec, page, size);
-        return new Result<PageInfo>(true, StatusCode.OK, "分页条件查询成功", pageInfo);
+    /***
+     * 根据ID查询Spec数据
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public Result<Spec> findById(@PathVariable Integer id) {
+        //调用SpecService实现根据主键查询Spec
+        Spec spec = specService.findById(id);
+        return new Result<Spec>(true, StatusCode.OK, "查询成功", spec);
+    }
+
+    /***
+     * 查询Spec全部数据
+     * @return
+     */
+    @GetMapping
+    public Result<List<Spec>> findAll() {
+        //调用SpecService实现查询所有Spec
+        List<Spec> list = specService.findAll();
+        return new Result<List<Spec>>(true, StatusCode.OK, "查询成功", list);
     }
 }

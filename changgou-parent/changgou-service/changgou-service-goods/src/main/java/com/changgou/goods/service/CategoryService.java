@@ -5,24 +5,69 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
+
 public interface CategoryService {
 
-    List<Category> findAll();
+    /***
+     * 根据分类父节点ID查询所有子节点结合
+     * @param  pid :父节点的id 如果是一级节点 那就等于0
+     */
+    public List<Category> findByParentId(Integer pid);
 
-    Category findById(Integer id);
 
+    /***
+     * Category多条件分页查询
+     * @param category
+     * @param page
+     * @param size
+     * @return
+     */
+    PageInfo<Category> findPage(Category category, int page, int size);
+
+    /***
+     * Category分页查询
+     * @param page
+     * @param size
+     * @return
+     */
+    PageInfo<Category> findPage(int page, int size);
+
+    /***
+     * Category多条件搜索方法
+     * @param category
+     * @return
+     */
     List<Category> findList(Category category);
 
-    PageInfo<Category> findPage(Integer page, Integer size);
-
-    PageInfo<Category> findPage(Category category, Integer page, Integer size);
-
-    List<Category> findByParentId(Integer pid);
-
+    /***
+     * 删除Category
+     * @param id
+     */
     void delete(Integer id);
 
+    /***
+     * 修改Category数据
+     * @param category
+     */
     void update(Category category);
 
+    /***
+     * 新增Category
+     * @param category
+     */
     void add(Category category);
 
+    /**
+     * 根据ID查询Category
+     *
+     * @param id
+     * @return
+     */
+    Category findById(Integer id);
+
+    /***
+     * 查询所有Category
+     * @return
+     */
+    List<Category> findAll();
 }

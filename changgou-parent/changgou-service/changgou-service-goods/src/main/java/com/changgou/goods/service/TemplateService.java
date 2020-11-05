@@ -5,10 +5,12 @@ import com.github.pagehelper.PageInfo;
 
 import java.util.List;
 
-/**
- * 模板业务层
- */
+
 public interface TemplateService {
+
+    Template findByCategoryId(Integer categoryId);
+
+
     /***
      * Template多条件分页查询
      * @param template
